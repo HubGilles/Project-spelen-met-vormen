@@ -63,6 +63,7 @@ def blue(image):
     image_B[:,:,[0,1]] = 0
     return image_B
 
+
 def counterclockwise(image):
     """
     Rotate the image counterclockwise by 90 degrees.
@@ -150,9 +151,10 @@ def organize(*arrays,dimension):
     Returns:
     - image_reorder: The organized image.
     """
-     concatenated_array = np.concatenate(arrays, axis=1)
-     image_reorder = np.concatenate((np.split(concatenated_array, dimension, axis=1)), axis = 0)
-     return image_reorder   
+    
+    concatenated_array = np.concatenate(arrays, axis=1)
+    image_reorder = np.concatenate((np.split(concatenated_array, dimension, axis=1)), axis = 0)
+    return image_reorder   
 
 def kwadrant(image, kwadrant=1):
     """
@@ -260,3 +262,38 @@ def zoom(image, x_zoom=1.3, y_zoom=1.3, x_center=50, y_center=50):
     image_zoomed = view_zoomed[y_center - image_height//2 : y_center + image_height//2 + image_height%2, x_center - image_width//2 : x_center + image_width//2 + image_width%2]
 
     return image_zoomed
+
+
+def rotate(image, angle):
+    """
+    Rotate the input image by the specified angle (in degrees).
+    """
+    # Convert angle to radians
+    angle_rad = np.radians(angle)
+    
+    # Get image dimensions
+    height, width = image.shape[:2]
+    
+    # Calculate the center of the image
+    center_y = height / 2
+    center_x = width / 2
+    
+    # Compute the rotation matrix
+    rotation_matrix = np.array([[np.cos(angle_rad), -np.sin(angle_rad)],
+                                [np.sin(angle_rad), np.cos(angle_rad)]])
+    
+    # Create output image array
+    rotated_image = np.zeros_like(image)
+    
+    # Iterate over each pixel in the rotated image
+    for y in range(height):
+        for x in range(width):
+            # Apply the inverse rotation to get the corresponding pixel in the original image
+            rotated_y, rotated_x = np.dot(rotation_matrix, [y - center_y, x - center_x]) + [center_y, center_x]
+            
+            # Perform bilinear interpolation to get the pixel value
+            if 0 <= rotated_y < height - 1 and 0 <= rotated_x < width - 1:
+                rotated_image[y, x] = bilinear_interpolation(image, rotated_y, rotated_x)
+    
+    return rotated_image
+
