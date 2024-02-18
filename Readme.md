@@ -31,7 +31,12 @@ After activating the conda environment, you can run the project using the follow
 It demonstrates different image manipulation techniques using the imported functions from "Manipulation.py", such as flipping, rotating, resizing, and coloring quadrants of the image.
 The processed images are displayed using the "show" function, which utilizes Matplotlib to visualize the images.
 
+### Select image to modify
 
+1. Save your image "name_of_image" in the project folder "Foto/"
+2. Modify the image_name in "Main.py" to your foto name:
+    ```sh
+    image_name = "name_of_image"
 ## Features
 
 Resize images to specific dimensions.
